@@ -2,16 +2,32 @@ class Api::V1::UsersController < ApplicationController
   skip_before_action :verify_authenticity_token
 
   def createUser
-    user = User.new(user_params)
-    if user.save
-      render json: {message: "User created successfully"}, status: :created
+    service = UserService.new(user_params,nil)
+    result = service.createUser
+    if result[:success]
+      render json: {message: result[:message]}, status: :created
     else 
-      render json: {errors: user.errors.full_messages}, status: :unprocessable_entity
+      render json: {errors: result[:errors]}, status: :unprocessable_entity
     end
   end
+
+  def login
+    service = UserService.new(nil,login_params)
+    result = service.login
+    if result[:success]
+      render json: {message: result[:message]}, status: :ok
+    else
+      render json: {errors: result[:errors]}, status: :unauthorized
+    end
+  end 
+
   private 
 
   def user_params
-    params.permit(:name, :email, :password, :phone_number)
+    params.require(:user).permit(:name, :email, :password, :phone_number)
+  end
+
+  def login_params
+    params.require(:user).permit(:email, :password)
   end
 end

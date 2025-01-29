@@ -2,8 +2,7 @@ class Api::V1::UsersController < ApplicationController
   skip_before_action :verify_authenticity_token
 
   def createUser
-    service = UserService.new(user_params,nil)
-    result = service.createUser
+    result = UserService.createUser(user_params)
     if result[:success]
       render json: {message: result[:message]}, status: :created
     else 
@@ -12,8 +11,7 @@ class Api::V1::UsersController < ApplicationController
   end
 
   def login
-    service = UserService.new(nil,login_params)
-    result = service.login
+    result = UserService.login(login_params)
     if result[:success]
       render json: {message: result[:message]}, status: :ok
     else

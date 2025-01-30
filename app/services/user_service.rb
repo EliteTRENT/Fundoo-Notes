@@ -24,7 +24,8 @@ class UserService
     user = User.find_by(email: fp_params[:email])
     if user
       @@otp = rand(100000..999999)
-      return {success: true, otp: @@otp}
+      UserMailer.text_mail(user.email,@@otp).deliver_now
+      return {success: true, message: "OTP has been sent to #{user.email}, check your inbox"}
     else
       return {success: false}
     end

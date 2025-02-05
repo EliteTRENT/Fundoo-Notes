@@ -24,6 +24,7 @@ class UserService
     user = User.find_by(email: fp_params[:email])
     if user
       @@otp = rand(100000..999999)
+      @@otp_generated_at = Time.current
       UserMailer.text_mail(user.email,@@otp).deliver_now
       return {success: true, message: "OTP has been sent to #{user.email}, check your inbox"}
     else
@@ -32,12 +33,12 @@ class UserService
   end
 
   def self.resetPassword(user_id,rp_params)
-    if rp_params[:otp].to_i == @@otp
+    if rp_params[:otp].to_i == @@otp && (Time.current - @@otp_generated_at < 1.minute)
       user = User.find_by(id: user_id)
       if user 
         user.update(password: rp_params[:new_password])
         @@otp = nil
-        return {success: true}
+        return {success: true}  
       else 
         return {success: false, errors: "User not found"}
       end
@@ -48,4 +49,5 @@ class UserService
 
   private 
   @@otp = nil
+  @@otp_generated_at = nil
 end

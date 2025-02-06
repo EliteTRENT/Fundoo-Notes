@@ -8,8 +8,9 @@ class JsonWebToken
   end
 
   def self.decode(token)
-    decoded = JWT.decode(token, SECRET_KEY, true, algorithm: 'HS256')[0]
-    HashWithIndifferentAccess.new(decoded)
+    decoded = JWT.decode(token, SECRET_KEY, true, algorithms: 'HS256')[0]
+    payload = HashWithIndifferentAccess.new(decoded)
+    return User.find_by(id: payload[:id])
   rescue
     nil
   end

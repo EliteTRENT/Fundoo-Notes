@@ -10,6 +10,7 @@ Rails.application.routes.draw do
           post "notes" => "notes#addNote"
           get "notes/getNote" => "notes#getNote"
           get "notes/getNoteById/:id" => "notes#getNoteById"
+          put "notes/trashToggle/:id" => "notes#trashToggle"
       end
     end
 end

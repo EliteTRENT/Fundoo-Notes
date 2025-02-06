@@ -43,4 +43,18 @@ class NoteService
       return {success: false, error: "Token not valid for this note"}
     end
   end
+
+  def self.trashToggle(note_id)
+    note = Note.find_by(id: note_id)
+    if note
+      if note.isDeleted == false
+        note.update(isDeleted: true)
+      else
+        note.update(isDeleted: false)
+      end
+      return {success: true, message: "Status toggled"}
+    else
+      return {success: false, errors: "Couldn't toggle the status"}
+    end
+  end
 end

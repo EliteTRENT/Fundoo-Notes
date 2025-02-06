@@ -71,4 +71,15 @@ class NoteService
       return {success: false, errors: "Couldn't toggle the status"}
     end
   end
+
+  def self.changeColor(note_id,color_params)
+    note = Note.find_by(id: note_id)
+    if note
+      note.update(color: color_params[:color])
+      return {success: true, message: "Color changed"}
+    else
+      return {success: false, errors: "Couldn't change the color"}
+    end
+    
+  end
 end

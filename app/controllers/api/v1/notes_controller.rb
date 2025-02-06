@@ -50,6 +50,16 @@ class Api::V1::NotesController < ApplicationController
       render json: {errors: result[:errors]}, status: :bad_request
     end
   end
+
+  def changeColor
+    note_id = params[:id]
+    result = NoteService.changeColor(note_id,color_params)
+    if result[:success]
+      render json: {message: result[:message]}, status: :ok
+    else
+      render json: {errors: result[:errors]}, status: :bad_request
+    end
+  end
   
   private
   def note_params

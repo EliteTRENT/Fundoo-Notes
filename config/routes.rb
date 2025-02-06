@@ -5,6 +5,13 @@ Rails.application.routes.draw do
           post "users/login" => "users#login"
           put "users/forgetPassword" => "users#forgetPassword"
           put "users/resetPassword/:id" => "users#resetPassword"
+<<<<<<< Updated upstream
+=======
+
+        #APIs for Note entity
+          post "notes" => "notes#addNote"
+          get "notes/getNote" => "notes#getNote"
+>>>>>>> Stashed changes
       end
     end
 end

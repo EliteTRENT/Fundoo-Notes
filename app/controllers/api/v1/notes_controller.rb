@@ -7,7 +7,7 @@ class Api::V1::NotesController < ApplicationController
       render json: {message: result[:message]}, status: :ok
     else
       render json: {errors: result[:error]}, status: :unprocessable_entity
-    end
+    end 
   end
 
   def getNote

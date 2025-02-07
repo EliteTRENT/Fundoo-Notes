@@ -66,3 +66,5 @@ end
 
 gem "dotenv-rails", "~> 3.1"
 gem "mail"
+
+gem "bunny"

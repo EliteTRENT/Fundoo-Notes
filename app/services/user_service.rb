@@ -25,11 +25,26 @@ class UserService
     if user
       @@otp = rand(100000..999999)
       @@otp_generated_at = Time.current
-      UserMailer.text_mail(user.email,@@otp).deliver_now
+      # UserMailer.text_mail(user.email,@@otp).deliver_now
+      send_otp_to_queue(user.email,@@otp)
+      OtpWorker.start
+      #UserMailer.enqueue_text_email(user,@@otp)
       return {success: true, message: "OTP has been sent to #{user.email}, check your inbox"}
     else
       return {success: false}
     end
+  end
+
+  def self.send_otp_to_queue(email, otp)
+    connection = Bunny.new
+    connection.start
+    channel = connection.create_channel
+    queue = channel.queue('otp_queue', durable: true)
+
+    message = { email: email, otp: otp}.to_json
+    queue.publish(message, persistent: true)
+
+    connection.close
   end
 
   def self.resetPassword(user_id,rp_params)

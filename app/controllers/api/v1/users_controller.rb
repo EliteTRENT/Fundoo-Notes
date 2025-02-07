@@ -57,10 +57,14 @@ class Api::V1::UsersController < ApplicationController
   end
 
   def handle_login_error(exception)
-    if exception.message == "Invalid email"
+    case exception.message
+    when "Invalid email"
       render json: {errors: "Invalid email"}, status: :bad_request
-    else 
+    when "Invalid password"
       render json: {errors: "Invalid password"}, status: :bad_request
+    else
+      render json: {errors: exception.message}, status: :internal_server_error
     end
   end
+  
 end

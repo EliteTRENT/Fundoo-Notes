@@ -68,3 +68,5 @@ gem "dotenv-rails", "~> 3.1"
 gem "mail"
 
 gem "bunny"
+gem "redis", "~> 4.2"
+

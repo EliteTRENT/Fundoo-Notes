@@ -1,4 +1,5 @@
 class NoteService
+  @@redis = Redis.new(host: "localhost", port: 6379)
   def self.addNote(note_params,token)
     user_data = JsonWebToken.decode(token)
     unless user_data
@@ -13,22 +14,20 @@ class NoteService
   end
 
   def self.getNote(token)
-    user_data = JsonWebToken.decode(token)
-    unless user_data
-      return {success: false, error: "Unauthorized access" }
+    @current_user = JsonWebToken.decode(token)
+    return { success: false, error: "Unauthorized access" } unless @current_user
+
+    user_id = @current_user[:id]
+    cache_key = "user_#{user_id}_notes"
+    cached_notes = @@redis.get(cache_key)
+    if cached_notes
+      return { success: true, notes: JSON.parse(cached_notes) } 
     end
-    note = user_data.notes.where(isDeleted: false, isArchive: false).includes(:user)
-    if note
-      # notes_with_user = note.each do |note|
-      #   {
-      #     note: note,
-      #     user: note.user 
-      #   }
-      # end
-        return { success: true, body: note}
-    else
-      return {success: false, error: "Couldn't get notes"}
-    end
+    notes = @current_user.notes
+    return { success: false, error: "No notes found" } unless notes.any?
+    @@redis.set(cache_key, notes.to_json, ex: 300)
+
+    { success: true, notes: notes }
   end
 
   def self.getNoteById(note_id,token)

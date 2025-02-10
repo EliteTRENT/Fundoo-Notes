@@ -248,6 +248,7 @@ GEM
     rbtree (0.4.6)
     rdoc (6.11.0)
       psych (>= 4.0.0)
+    redis (4.8.1)
     regexp_parser (2.10.0)
     reline (0.6.0)
       io-console (~> 0.5)
@@ -369,6 +370,7 @@ DEPENDENCIES
   propshaft
   puma (>= 5.0)
   rails (~> 8.0.1)
+  redis (~> 4.2)
   rubocop-rails-omakase
   selenium-webdriver
   solid_cable

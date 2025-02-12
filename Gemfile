@@ -68,7 +68,7 @@ gem "dotenv-rails", "~> 3.1"
 gem "mail"
 
 gem "bunny"
-gem "redis", "~> 4.2"
+gem "redis", "~> 5.3"
 
 gem "rswag-ui"
 gem "rswag-api"

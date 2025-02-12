@@ -1,15 +1,15 @@
 class NoteService
   @@redis = Redis.new(host: "localhost", port: 6379)
-  def self.addNote(note_params,token)
+  def self.addNote(note_params, token)
     user_data = JsonWebToken.decode(token)
     unless user_data
-      return {success: false, error: "Unauthorized access" }
+      return { success: false, error: "Unauthorized access" }
     end
     note = user_data.notes.new(note_params)
     if note.save
-      return {success: true, message: "Note added successfully"}
+      { success: true, message: "Note added successfully" }
     else
-      return {success: false, error: "Couldn't add note"}
+      { success: false, error: "Couldn't add note" }
     end
   end
 
@@ -21,7 +21,7 @@ class NoteService
     cache_key = "user_#{user_id}_notes"
     cached_notes = @@redis.get(cache_key)
     if cached_notes
-      return { success: true, notes: JSON.parse(cached_notes) } 
+      return { success: true, notes: JSON.parse(cached_notes) }
     end
     notes = @current_user.notes
     return { success: false, error: "No notes found" } unless notes.any?
@@ -30,16 +30,16 @@ class NoteService
     { success: true, notes: notes }
   end
 
-  def self.getNoteById(note_id,token)
+  def self.getNoteById(note_id, token)
     user_data = JsonWebToken.decode(token)
     note = Note.find_by(id: note_id)
     unless user_data
-      return {success: false, error: "Unauthorized access" }
+      return { success: false, error: "Unauthorized access" }
     end
     if user_data[:id] == note.user_id
-      return {success: true, note: note}
+      { success: true, note: note }
     else
-      return {success: false, error: "Token not valid for this note"}
+      { success: false, error: "Token not valid for this note" }
     end
   end
 
@@ -51,9 +51,9 @@ class NoteService
       else
         note.update(isDeleted: false)
       end
-      return {success: true, message: "Status toggled"}
+      { success: true, message: "Status toggled" }
     else
-      return {success: false, errors: "Couldn't toggle the status"}
+      { success: false, errors: "Couldn't toggle the status" }
     end
   end
 
@@ -65,20 +65,19 @@ class NoteService
       else
         note.update(isArchive: false)
       end
-      return {success: true, message: "Status toggled"}
+      { success: true, message: "Status toggled" }
     else
-      return {success: false, errors: "Couldn't toggle the status"}
+      { success: false, errors: "Couldn't toggle the status" }
     end
   end
 
-  def self.changeColor(note_id,color_params)
+  def self.changeColor(note_id, color_params)
     note = Note.find_by(id: note_id)
     if note
       note.update(color: color_params[:color])
-      return {success: true, message: "Color changed"}
+      { success: true, message: "Color changed" }
     else
-      return {success: false, errors: "Couldn't change the color"}
+      { success: false, errors: "Couldn't change the color" }
     end
-    
   end
 end

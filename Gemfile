@@ -70,3 +70,9 @@ gem "mail"
 gem "bunny"
 gem "redis", "~> 4.2"
 
+gem "rswag-ui"
+gem "rswag-api"
+gem "rswag-specs", "~> 2.16.0"
+
+
+gem "rspec-rails"

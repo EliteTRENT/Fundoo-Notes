@@ -29,7 +29,7 @@ class UserService
       send_otp_to_queue(user.email, @@otp)
       Thread.new { OtpWorker.start }
       # UserMailer.enqueue_text_email(user,@@otp)
-      { success: true, message: "OTP has been sent to #{user.email}, check your inbox" }
+      { success: true, message: "OTP has been sent to #{user.email}, check your inbox", otp: @@otp, otp_generated_at: @@otp_generated_at }
     else
       { success: false }
     end

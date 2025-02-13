@@ -22,7 +22,7 @@ class Api::V1::UsersController < ApplicationController
   def forgetPassword
     result = UserService.forgetPassword(fp_params)
     if result[:success]
-      render json: {message: result[:message]}, status: :ok
+      render json: {message: result[:message], otp: result[:otp]}, status: :ok
     else
       render json: {errors: "Email not registered"}, status: :not_found
     end

@@ -8,7 +8,7 @@ info:
 paths:
   "/api/v1/notes":
     post:
-      summary: Create a new note
+      summary: Creating a new note
       tags:
       - Notes
       security:

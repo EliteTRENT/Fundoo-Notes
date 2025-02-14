@@ -17,7 +17,7 @@ class NoteService
     @current_user = JsonWebToken.decode(token)
     return { success: false, error: "Unauthorized access" } unless @current_user
 
-    user_id = @current_user[:id]
+    user_id = @current_user.id
     cache_key = "user_#{user_id}_notes"
     cached_notes = @@redis.get(cache_key)
     if cached_notes

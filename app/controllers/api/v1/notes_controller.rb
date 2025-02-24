@@ -4,7 +4,7 @@ class Api::V1::NotesController < ApplicationController
     token = request.headers["Authorization"]&.split(" ")&.last
     result = NoteService.addNote(note_params,token)
     if result[:success]
-      render json: {message: result[:message]}, status: :ok
+      render json: {message: result[:message], note: result[:note]}, status: :ok
     else
       render json: {errors: result[:error]}, status: :unprocessable_entity
     end 
@@ -14,7 +14,7 @@ class Api::V1::NotesController < ApplicationController
     token = request.headers["Authorization"]&.split(" ")&.last
     result = NoteService.getNote(token)
     if result[:success]
-      render json: result[:notes], status: :ok
+      render json: {notes: result[:notes]}, status: :ok
     else 
       render json: {errors: result[:error]}, status: :unprocessable_entity
     end

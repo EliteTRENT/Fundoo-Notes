@@ -7,7 +7,8 @@ class NoteService
     end
     note = user_data.notes.new(note_params)
     if note.save
-      { success: true, message: "Note added successfully" }
+      @@redis.del("user_#{user_data.id}_notes") 
+      { success: true, message: "Note added successfully", note: note}
     else
       { success: false, error: "Couldn't add note" }
     end
@@ -51,6 +52,8 @@ class NoteService
       else
         note.update(isDeleted: false)
       end
+      user_id = note.user_id  # Assuming `Note` belongs to a `User`
+      @@redis.del("user_#{user_id}_notes")  
       { success: true, message: "Status toggled" }
     else
       { success: false, errors: "Couldn't toggle the status" }
@@ -65,6 +68,8 @@ class NoteService
       else
         note.update(isArchive: false)
       end
+      user_id = note.user_id  # Assuming `Note` belongs to a `User`
+      @@redis.del("user_#{user_id}_notes")  
       { success: true, message: "Status toggled" }
     else
       { success: false, errors: "Couldn't toggle the status" }

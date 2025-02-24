@@ -76,3 +76,5 @@ gem "rswag-specs", "~> 2.16.0"
 
 
 gem "rspec-rails"
+gem 'rack-cors'
+
